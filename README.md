@@ -1,13 +1,13 @@
 ### task Description: 
 
-https://testnets.opensea.io/get-listed/
-https://app.pinata.cloud/pinmanager
+- Тестовое задание по Solidity.
 
+Цель понять, что имеется опыт практической работы и имеется возможность выполнять базовые блокчейн процедуры.
+Необходимо на тестовой сети Rinkeby создать смарт контракт, один из которых ERC 721a (К1), второй все равно какой (К2). В К1 необходимо сминтить токен на кошелек 1. Далее  необходимо реализовать процедуру по которой K2 получит возможность распоряжаться токеном Кошелька 1, что бы потом без участия Кошелька 1, K2 мог передать его токен на любой другой Кошелек в K1.
 #### contracts : 	
 
-- contract EasyMarketPlace = ''
-- contract SimpleERC721 = ''
-
+- contract EasyMarketPlace = https://rinkeby.etherscan.io/address/0x8b6c277c5E6A34058a43C66e0495c9B58f5df89D#code
+- contract SimpleERC721 = https://rinkeby.etherscan.io/address/0x10e6971b80942F8eF469638aDFC001B56966Ea9b#code
 #### All packages:
 ```
 yarn init 
@@ -31,26 +31,10 @@ npx hardhat run --network localhost scripts/deploy.js
 npx hardhat run scripts/deploy.js --network rinkiby
 npx hardhat verify <contract_address> --network rinkiby
 npx hardhat verify --constructor-args scripts/arguments.js <contract_address> --network rinkiby
-npx hardhat verify --constructor-args scripts/arguments.js <conract_address> --network rinkiby
 yarn run hardhat size-contracts 
 yarn run hardhat size-contracts --no-compile
 ```
 
 #### Testing report   
 
-How to use TokenTimelock.sol to lock up tokens?
-https://forum.openzeppelin.com/t/how-to-use-tokentimelock-sol-to-lock-up-tokens/738/2
-Protect Your Users With Smart Contract Timelocks
-https://www.youtube.com/watch?v=W2k32FrAD1k
-
-https://docs.openzeppelin.com/contracts/2.x/crowdsales#postdeliverycrowdsale  The PostDeliveryCrowdsale, как следует из названия, распределяет токены после завершения краудсейла, позволяя пользователям звонить withdrawTokens, чтобы получить купленные ими токены.
-
-How To Use AccessControl.sol
-https://medium.com/coinmonks/how-to-use-accesscontrol-sol-9ea3a57f4b15
-Access Control - OpenZeppelin Docs
-https://docs.openzeppelin.com/contracts/4.x/api/access
-
-Роли можно назначать и отзывать динамически с помощью функций grantRole и . revokeRole С каждой ролью связана роль администратора, и только учетные записи, имеющие роль администратора роли, могут вызывать grantRole и revokeRole.
-
-По умолчанию роль администратора для всех ролей — DEFAULT_ADMIN_ROLE, что означает, что только учетные записи с этой ролью смогут предоставлять или отзывать другие роли. Более сложные ролевые отношения можно создать с помощью _setRoleAdmin. Он DEFAULT_ADMIN_ROLE также является собственным администратором: у него есть право назначать и отзывать эту роль. Следует принять дополнительные меры предосторожности для защиты учетных записей, которым он был предоставлен!.  https://docs.openzeppelin.com/contracts/4.x/api/access#AccessControl
 

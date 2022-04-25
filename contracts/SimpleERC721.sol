@@ -25,11 +25,10 @@ contract SimpleERC721 is ERC721URIStorage, AccessControl, PullPayment{
   uint public totalSales; // общее кол-во продаж 
   string public baseTokenURI; // базовая строка URI 
   
-  constructor(address _mpContract) 
+  constructor() 
   ERC721("NFTForMarketPlace", "NFT01")  // Initializes the domain separator and parameter caches. draft-EIP712.sol 
   { 
          baseTokenURI = "ipfs://"; // установить базовый URI для всех токенов 
-         mpContract = _mpContract;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender); // роль администратора 
         _grantRole(MINTER_ROLE, mpContract); // роль минтера для маркетплейс контракта 
         // КОРОТКОЕ ПОЯСНЕНИЕ К РОЛЯМ: 
@@ -41,7 +40,6 @@ contract SimpleERC721 is ERC721URIStorage, AccessControl, PullPayment{
         // revokeRole(bytes32 role, address account) отозвать роль у адреса. 
         // hasRole(bytes32 role, address account) чекнуть роль на наличие в контракте return bool. 
   }
-
 // проверка на то что толко адресс маркет плейса может вызывать метод
 // modifier onlyMarketPlace(address _address) {
 //         require(_address == mpContract, "you are not in the list of buyers");
@@ -119,4 +117,8 @@ function setMarketPlaceAddress(address _mpContract) external onlyRole(DEFAULT_AD
     res = TOTAL_SUPPLY - currentTokenId.current(); 
     return res;
     } 
+  function setMarketPlaceContract(address _mpContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  require(_mpContract != address(0), "wrong address");
+  mpContract = _mpContract;
+  }
 }

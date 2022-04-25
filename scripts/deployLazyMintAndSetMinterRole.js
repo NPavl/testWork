@@ -2,7 +2,7 @@ const { ethers }  = require('hardhat');
 // const { PRIVATE_KEY, URL_ALCHEMY, CONTRACT_ADDRESS } = process.env
 
 // npx hardhat run scripts/deployAndSetMinterRole.js --network localhost
-// npx hardhat run scripts/deployAndSetMinterRole.js --network rinkiby
+// npx hardhat run scripts/deployLazyMintAndSetMinterRole.js--network rinkiby
 
 async function main() {
   
@@ -19,7 +19,7 @@ async function main() {
   const [admin, minter, relayer] = await ethers.getSigners();
 
   const ERC721LazyMintWith712 = await ethers.getContractFactory("ERC721LazyMintWith712")
-  const eRC721LazyMintWith712 = await ERC721LazyMintWith712.deploy('ERC721LazyMintWith712', 'ABC')
+  const eRC721LazyMintWith712 = await ERC721LazyMintWith712.deploy(60, 'ABC')
 
   console.log("Contract address:", eRC721LazyMintWith712.address)
 

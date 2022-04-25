@@ -2,7 +2,7 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 import "./SimpleERC721.sol";
-import "./VRFConsumerBase.sol"; // 
+// import "./VRFConsumerBase.sol"; // 
 // import "@openzeppelin/contracts/access/Ownable.sol"; 
 import "@openzeppelin/contracts/utils/Context.sol"; // 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol"; // безопасная библиотека для простых арифетич вычислений 
