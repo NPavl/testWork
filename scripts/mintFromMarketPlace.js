@@ -6,8 +6,8 @@ const { ethers }  = require('hardhat');
 // простой пример без заморчек: https://xtremetom.medium.com/verifying-solidity-signatures-4898d003846b
 // пример используемый в проекте: https://github.com/OpenZeppelin/workshops/tree/master/06-nft-merkle-drop/scripts
 
-// npx hardhat run scripts/mintFromERC721.js --network localhost
-// npx hardhat run scripts/mintFromERC721.js --network rinkiby
+// npx hardhat run scripts/mintFromMarketPlace.js --network localhost
+// npx hardhat run scripts/mintFromMarketPlace.js --network rinkiby
 
 async function main() { 
   
