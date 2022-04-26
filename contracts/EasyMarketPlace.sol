@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol"; 
 import "@openzeppelin/contracts/security/PullPayment.sol"; 
 import "hardhat/console.sol"; 
-// import "@openzeppelin/contracts/token/ERC20/utils/TokenTimelock.sol"; 
+// import "@openzeppelin/contracts/token/ERC20/utils/TokenTimelock.sol"; // не исп
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol"; 
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 
@@ -53,7 +53,6 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
     address payable private withdrewAddr;
     mapping(address => uint256[]) private marketPlaceItems; 
     mapping(uint256 => bool) internal tokenSaleStatus;
-    // address private externalERC721Contract;
     // mapping(uint => Auction) private _dealerInAuction; 
     mapping(uint256 => Deal) private _dealerInDeal; 
     mapping(address => uint256[]) private byersItems; 

@@ -11,7 +11,6 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 contract SimpleERC721 is ERC721URIStorage, AccessControl, PullPayment {
     using Counters for Counters.Counter;
     using SafeMath for uint256;
-    bytes32 digest;
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     address private mpContract;
     Counters.Counter private currentTokenId;
