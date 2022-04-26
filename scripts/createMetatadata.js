@@ -11,11 +11,11 @@ async function storeAsset() {
        name: 'ExampleNFT',
        description: 'My ExampleNFT is an awesome artwork!',
        image: new File(
-           [await fs.promises.readFile('images/5.png')],
-           '20210918_SQ_UK.jpg',
-           { type: 'image/png' }
+           [await fs.promises.readFile('images/11.jpg')],
+           'images/11.jpg',
+           { type: 'image/jpg' }
        ),
-       external_url: "https://example.com/?token_id=1",
+       external_url: "https://example.com/?token_id=11",
         attributes: [
             {
                "trait_type" : "level",
@@ -46,8 +46,8 @@ async function storeAsset() {
             }
          ],
    })
-} 
    console.log("Metadata stored on Filecoin and IPFS with URL:", metadata.url)
+} 
 
 storeAsset()
    .then(() => process.exit(0))

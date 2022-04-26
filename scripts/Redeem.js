@@ -1,6 +1,8 @@
 const { ethers }  = require('hardhat');
 const { PRIVATE_KEY, MINTER_ADDRESS, SIGNATURE} = process.env
 
+ // sample https://github.com/OpenZeppelin/workshops/blob/master/06-nft-merkle-drop/scripts/3-redeem.js
+
 // npx hardhat run scripts/onlyRedeem.js --network localhost
 // npx hardhat run scripts/onlyRedeem.js --network rinkiby
 
