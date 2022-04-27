@@ -3,7 +3,7 @@ const fs = require("fs");
 require('dotenv').config();
 const {NFT_STORAGE_API_KEY} = process.env 
 
-// npx hardhat run scripts/createMetatadata.js --network rinkeby
+// npx hardhat run scripts/createMetadata.js --network rinkeby
 
 async function storeAsset() {
    const client = new NFTStorage({ token: NFT_STORAGE_API_KEY })

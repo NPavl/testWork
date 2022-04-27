@@ -4,17 +4,17 @@ pragma solidity >=0.4.22 <0.9.0;
 import "./SimpleERC721.sol";
 // import "./VRFConsumerBase.sol"; // chainlink random num
 // import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Context.sol"; 
+import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"; 
-import "@openzeppelin/contracts/access/AccessControl.sol"; 
-import "@openzeppelin/contracts/security/PullPayment.sol"; 
-import "hardhat/console.sol"; 
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/PullPayment.sol";
+import "hardhat/console.sol";
 // import "@openzeppelin/contracts/token/ERC20/utils/TokenTimelock.sol"; // не исп
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol"; 
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 
-// import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol"; 
+// import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
 // https://docs.openzeppelin.com/contracts/2.x/crowdsales#postdeliverycrowdsale
 // https://www.youtube.com/watch?v=W2k32FrAD1k  Protect Your Users With Smart Contract Timelocks (OZ Defender)
@@ -38,7 +38,7 @@ library SetRandomAndSign {
             module;
         _digest = ECDSA.toEthSignedMessageHash(
             keccak256(abi.encodePacked(msg.sender, _setRandom, _uri))
-        ); 
+        );
         return (_setRandom, _digest);
     }
 }
@@ -46,17 +46,17 @@ library SetRandomAndSign {
 contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    using SafeMath for uint256; 
+    using SafeMath for uint256;
     SimpleERC721 private simpleERC721;
-    uint256 public totalSales; 
-    uint32 public vestingPeriod; 
+    uint256 public totalSales;
+    uint32 public vestingPeriod;
     address payable private withdrewAddr;
-    mapping(address => uint256[]) private marketPlaceItems; 
+    mapping(address => uint256[]) private marketPlaceItems;
     mapping(uint256 => bool) internal tokenSaleStatus;
-    // mapping(uint => Auction) private _dealerInAuction; 
-    mapping(uint256 => Deal) private _dealerInDeal; 
-    mapping(address => uint256[]) private byersItems; 
-    mapping(address => mapping(uint => bytes32)) private itemsDigest; // buyer => (tokend => hash)
+    // mapping(uint => Auction) private _dealerInAuction;
+    mapping(uint256 => Deal) private _dealerInDeal;
+    mapping(address => uint256[]) private byersItems;
+    mapping(address => mapping(uint256 => bytes32)) private itemsDigest; // buyer => (tokend => hash)
 
     constructor(uint32 _vestingPeriod, address _simpleERC721)
         EIP712("Vasia", "1.0.0")
@@ -64,12 +64,12 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         vestingPeriod = _vestingPeriod; // time in seconds
         simpleERC721 = SimpleERC721(_simpleERC721);
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        // _grantRole(MINTER_ROLE, _msgSender()); 
+        // _grantRole(MINTER_ROLE, _msgSender());
         // withdrewAddr = _withdrewAddr;
     }
-    
+
     // enum Step {ListItem, BuyItem}
-    
+
     modifier chekVestingPeriod(uint256 _selectId) {
         require(
             byersItems[msg.sender].length != 0,
@@ -99,10 +99,10 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
     event BuyItemEvent(
         address indexed _dealer,
         address indexed _buyer,
-        uint _selectId,
-        uint setRandom,
-        uint price,
-        uint purchaseTime,
+        uint256 _selectId,
+        uint256 setRandom,
+        uint256 price,
+        uint256 purchaseTime,
         bytes32 digest
     );
     struct Deal {
@@ -111,21 +111,22 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         uint256 price;
         uint256 purchaseTime;
     }
-    
+
     // struct Auction { }
     function createItemFromERC721Contract(string memory _uri)
         external
         onlyRole(MINTER_ROLE)
         returns (uint256 _id)
     {
-        // require(keccak256(bytes(_uri)) != keccak256(bytes("null")), "Invalid Name"); 
+        // require(keccak256(bytes(_uri)) != keccak256(bytes("null")), "Invalid Name");
         require(bytes(_uri).length != 0, "empty uri line");
-        (_id) = simpleERC721.FreeMintTokenForMarketPlace(_uri); 
+        (_id) = simpleERC721.FreeMintTokenForMarketPlace(_uri);
         marketPlaceItems[address(this)].push(_id);
         tokenSaleStatus[_id] == false;
         emit createItemEvent(_id, _uri);
         return _id;
     }
+
     function _verify(bytes32 digest, bytes calldata _signature)
         internal
         view
@@ -139,6 +140,7 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
             return false;
         }
     }
+
     function _hash(
         address account,
         uint256 randomNum,
@@ -149,10 +151,12 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
                 keccak256(abi.encodePacked(account, randomNum, _uri))
             );
     }
-    function listItemOnSale(
-        uint256 _selectId, 
-        uint256 _price 
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
+
+    function listItemOnSale(uint256 _selectId, uint256 _price)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (bool)
+    {
         require(_price > 0, "price less then 0");
         require(
             tokenSaleStatus[_selectId] == false,
@@ -176,8 +180,12 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         console.log("this contract does not have such IDs: ", _selectId);
         return false;
     }
-    
-    function buyItem(uint _selectId) external payable returns(uint setRandom, bytes32 _digest) {
+
+    function buyItem(uint256 _selectId)
+        external
+        payable
+        returns (uint256 setRandom, bytes32 _digest)
+    {
         require(
             tokenSaleStatus[_selectId] == true,
             "this token has already been sold"
@@ -193,9 +201,12 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         //                 _selectId
         //             );
         require(bytes(_uri).length != 0, "empty uri line");
-        (setRandom, _digest) = SetRandomAndSign.setRandomNumber(_uri, _selectId);
+        (setRandom, _digest) = SetRandomAndSign.setRandomNumber(
+            _uri,
+            _selectId
+        );
         itemsDigest[msg.sender][_selectId] = _digest;
-        byersItems[msg.sender].push(_selectId); 
+        byersItems[msg.sender].push(_selectId);
         _dealerInDeal[_selectId].purchaseTime = block.timestamp;
         tokenSaleStatus[_selectId] == false;
         totalSales = totalSales.add(msg.value);
@@ -210,25 +221,29 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         );
         return (setRandom, _digest);
     }
-    function withdrawToken(
-        uint256 _selectId,
-        bytes calldata signature
-    ) public chekVestingPeriod(_selectId) onlyBuyer(msg.sender) {
+
+    function withdrawToken(uint256 _selectId, bytes calldata signature)
+        public
+        chekVestingPeriod(_selectId)
+        onlyBuyer(msg.sender)
+    {
         string memory _uri = simpleERC721.tokenURI(_selectId);
         require(bytes(_uri).length != 0, "empty uri line");
         bytes32 _digest = itemsDigest[msg.sender][_selectId];
         require(_verify(_digest, signature), "Invalid signature");
         for (uint256 i = 0; i < byersItems[msg.sender].length; i++) {
             if (_selectId == byersItems[msg.sender][i]) {
-                ERC721URIStorage(address(this)).transferFrom(
+                simpleERC721.transferFrom(
                     address(this),
                     msg.sender,
-                    _selectId
-                ); // make approve 
-                // ERC721(address(this)).transferFrom(address(this), msg.sender, _selectId); 
+                    _selectId   
+                ); // make approve
+                delete marketPlaceItems[address(this)][i];
+                // ERC721(address(this)).transferFrom(address(this), msg.sender, _selectId);
             }
         }
     }
+
     function withdrawPayments(address payable _address)
         public
         virtual
@@ -238,6 +253,7 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         require(_address == withdrewAddr, "wrong payment address");
         super.withdrawPayments(_address);
     }
+
     function partilWithdrawPayments(uint256 _value)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
@@ -248,6 +264,18 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         totalSales = _balance;
         withdrewAddr.transfer(_value);
     }
+
+    function getContractTokenBalance()
+        external
+        view
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (uint256 _balance)
+    {    
+        (_balance) = simpleERC721.balanceOf(address(this)); 
+        // uint _res = marketPlaceItems[address(this)].length;
+        return _balance;
+    }
+
     function setAddrForWithdrewPayments(address payable _withdrewAddr)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
@@ -255,6 +283,7 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         require(_withdrewAddr != address(0), "wrong new payment address");
         withdrewAddr = _withdrewAddr;
     }
+
     function isBayer(address _address) public view returns (bool) {
         if (byersItems[_address].length != 0) {
             return true;
@@ -262,6 +291,7 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
             return false;
         }
     }
+
     function changeVestingPeriod(uint32 _newVestigTime)
         external
         onlyRole(DEFAULT_ADMIN_ROLE)
@@ -269,6 +299,7 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         require(_newVestigTime > 0, "time in sec must be greater than 0");
         vestingPeriod = _newVestigTime;
     }
+
     function getTokenURIFromERC721Contract(uint256 _selectId)
         external
         view
@@ -289,27 +320,28 @@ contract EasyMarketPlace is AccessControl, EIP712, PullPayment {
         address _nftContract,
         uint256 _minPrice,
         address _erc20Contract
-    ) internal onlyRole(DEFAULT_ADMIN_ROLE) {} 
+    ) internal onlyRole(DEFAULT_ADMIN_ROLE) {}
 
     function cancelSale(uint256 _selectId)
         internal
         onlyRole(DEFAULT_ADMIN_ROLE)
-    {} 
+    {}
 
     function cancelAction(uint256 _selectId)
         internal
         onlyRole(DEFAULT_ADMIN_ROLE)
-    {} 
+    {}
 
     function finishAuction(uint256 _selectId)
         internal
         onlyRole(DEFAULT_ADMIN_ROLE)
-    {} 
+    {}
 
-    function makeBid(uint256 _selectId) internal {} 
+    function makeBid(uint256 _selectId) internal {}
 
-    function cancelBid(uint256 _selectId) internal {} 
+    function cancelBid(uint256 _selectId) internal {}
 
-    function distributeTokens() internal onlyRole(DEFAULT_ADMIN_ROLE) {} 
-    function setTokenUri() internal onlyRole(DEFAULT_ADMIN_ROLE) {} 
+    function distributeTokens() internal onlyRole(DEFAULT_ADMIN_ROLE) {}
+
+    function setTokenUri() internal onlyRole(DEFAULT_ADMIN_ROLE) {}
 }

@@ -18,18 +18,15 @@ async function main() {
   const TOKEN_ID = 1
   MARKET_PLACE_CONTRACT = ""
 
-  myContract = await ethers.getContractFactory("EasyMarketPlace");
-  myContract.attach(MARKET_PLACE_CONTRACT); 
+  // myContract = await ethers.getContractFactory("EasyMarketPlace");
+  // myContract.attach(MARKET_PLACE_CONTRACT); 
 
- // const provider = new ethers.providers.JsonRpcProvider(URL_ALCHEMY)
+  const myContract = await ethers.getContractAt('EasyMarketPlace', MARKET_PLACE_CONTRACT, ADMIN)
+
+  // const provider = new ethers.providers.JsonRpcProvider(URL_ALCHEMY)
   // admin = new ethers.Wallet(PRIVATE_KEY, provider)
   // const provider = new ethers.providers.JsonRpcProvider(URL_ALCHEMY)
   // buyer = new ethers.Wallet(PRIVATE_KEY, provider)
-  
-  // const myContract = await ethers.getContractAt('EasyMarketPlace', MARKET_PLACE_CONTRACT, admin)
-  // const myContract = await ethers.getContractAt('ERC721LazyMintWith712', MARKET_PLACE_CONTRACT, buyer)
-
-// покупатель забирает свой токен после окончания периода вестинга: 
 
 // в методе  withdrawToken происходит проверка подписи - require(_verify(_digest, signature), "Invalid signature");
 
