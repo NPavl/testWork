@@ -23,8 +23,8 @@ async function main() {
   const EasyMarketPlace = await ethers.getContractFactory("EasyMarketPlace")
   const easyMarketPlace = await EasyMarketPlace.deploy(VESTING_PERIOD, SIMPLE_ERC721) // 60 сек 
   
-  const tx = await easyMarketPlace.connect(deployer).grantRole(await easyMarketPlace.MINTER_ROLE(), MINTER_ADDRESS.address)
-  const result = tx.wait()
+  // const tx = await easyMarketPlace.connect(deployer).grantRole(await easyMarketPlace.MINTER_ROLE(), MINTER_ADDRESS.address)
+  // const result = tx.wait()
 
   console.log("Contract EasyMarketPlace address:", easyMarketPlace.address)
   console.log("Account balance:", (await deployer.getBalance()).toString())

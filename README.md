@@ -8,8 +8,8 @@
 contract EasyMarketPlace = https://rinkeby.etherscan.io/address/0x8b6c277c5E6A34058a43C66e0495c9B58f5df89D#code
 contract SimpleERC721 = https://rinkeby.etherscan.io/address/0x10e6971b80942F8eF469638aDFC001B56966Ea9b#code
 - UPDATE: 
-contract EasyMarketPlace = 
-contract SimpleERC721 = 
+contract EasyMarketPlace = https://rinkeby.etherscan.io/address/0x46B956f37cec485f83ed4E9643300637E8080b14#code
+contract SimpleERC721 = https://rinkeby.etherscan.io/address/0x02821BE9Ccca799449B3e1771e64DbC54f2cc2a0#code
 
 #### All packages:
 ```
