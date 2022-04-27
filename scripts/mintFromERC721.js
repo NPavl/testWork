@@ -1,7 +1,7 @@
 const { ethers }  = require('hardhat');
 
-// const { PRIVATE_KEY, URL_ALCHEMY, MINTER_ADDRESS, BUYER, 
-//    ACCOUNT_MPCONTRACT, SIMPLE_ERC721, META_DATA_URL, TOKEN_ID } = process.env
+const { PRIVATE_KEY, URL_ALCHEMY, MINTER_ADDRESS, BUYER, 
+   ACCOUNT_MPCONTRACT, SIMPLE_ERC721, META_DATA_URL, TOKEN_ID } = process.env
 
 // простой пример без заморчек работа с подписями: https://xtremetom.medium.com/verifying-solidity-signatures-4898d003846b
 // пример используемый в проекте: https://github.com/OpenZeppelin/workshops/tree/master/06-nft-merkle-drop/scripts
@@ -11,10 +11,11 @@ const { ethers }  = require('hardhat');
 
 async function main() { 
 
-const [ADMIN, MINTER_ADDRESS, BUYER] = await ethers.getSigners()
+// const [ADMIN, MINTER_ADDRESS, BUYER] = await ethers.getSigners()
+// const [ADMIN] = await ethers.getSigners()
 
-const SIMPLE_ERC721 = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-const META_DATA_URL = "ipfs://testUri.json"
+// const SIMPLE_ERC721 = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+// const META_DATA_URL = "ipfs://testUri.json"
 const value = ethers.utils.parseEther('0.001');
 const TOKEN_ID = 1
 // PROVIDER = "http://127.0.0.1:8545/" // http://localhost:8545 // // URL_ALCHEMY
@@ -22,8 +23,8 @@ const TOKEN_ID = 1
 // const Contract = await ethers.getContractFactory("SimpleERC721");
 // const myContract = await Contract.deploy(); 
 
-// const _provider = new ethers.providers.JsonRpcProvider("http://localhost:8545") // URL_ALCHEMY
-// const ADMIN = new ethers.Wallet(PRIVATE_KEY, _provider)
+const _provider = new ethers.providers.JsonRpcProvider(URL_ALCHEMY) // URL_ALCHEMY
+const ADMIN = new ethers.Wallet(PRIVATE_KEY, _provider)
 const myContract = await ethers.getContractAt('SimpleERC721', SIMPLE_ERC721, ADMIN)
 
 const tx = await myContract.connect(BUYER).PaidMintTokensForAll(META_DATA_URL, { value });

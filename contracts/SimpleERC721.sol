@@ -3,6 +3,7 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/PullPayment.sol";
@@ -24,6 +25,7 @@ contract SimpleERC721 is ERC721URIStorage, AccessControl, PullPayment {
     {
         baseTokenURI = "ipfs://";
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        //  _registerInterface(IERC721Receiver.onERC721Received.selector);
     }
 
     function PaidMintTokensForAll(string memory _uri)
@@ -56,7 +58,7 @@ contract SimpleERC721 is ERC721URIStorage, AccessControl, PullPayment {
         currentTokenId.increment();
         _id = currentTokenId.current();
         _safeMint(mpContract, _id);
-        _setTokenURI(_id, _uri);
+        _setTokenURI(_id, _uri);    
         return (_id);
     }
 
@@ -100,4 +102,9 @@ contract SimpleERC721 is ERC721URIStorage, AccessControl, PullPayment {
         res = TOTAL_SUPPLY - currentTokenId.current();
         return res;
     }
+
+    function setMarketPlaceContract(address _mpContract) external onlyRole(DEFAULT_ADMIN_ROLE){
+        require(_mpContract != address(0), "Invalid address");
+        mpContract = _mpContract;
+    } 
 }

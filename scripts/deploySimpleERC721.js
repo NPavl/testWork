@@ -3,7 +3,7 @@ const { ethers }  = require('hardhat');
 
 // npx hardhat run scripts/deploySimpleERC721.js --network localhost
 // npx hardhat run scripts/deploySimpleERC721.js --network rinkiby
-// npx hardhat verify <CONTARACT_ADDRESS> --network rinkiby
+// npx hardhat verify <CONTRACT_ADDRESS> --network rinkiby
 
 async function main() {
    
